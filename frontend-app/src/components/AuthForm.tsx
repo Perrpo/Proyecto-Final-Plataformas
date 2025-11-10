@@ -5,10 +5,12 @@ import './AuthForm.css';
 
 const AuthForm: React.FC = () => {
   const [tab, setTab] = useState<'login' | 'register'>('login');
-  const [username, setUsername] = useState('');
+  const [businessName, setBusinessName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [nit, setNit] = useState('');
+  const [role, setRole] = useState<'supermarket' | 'ong'>('supermarket');
   const [password, setPassword] = useState('');
-  const [business, setBusiness] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -24,8 +26,8 @@ const AuthForm: React.FC = () => {
       return;
     }
 
-    if (tab === 'register' && !username) {
-      setError('Nombre es requerido para registrarse');
+    if (tab === 'register' && (!businessName || !phone || !nit)) {
+      setError('Todos los campos son requeridos para registrarse');
       return;
     }
 
@@ -38,18 +40,25 @@ const AuthForm: React.FC = () => {
       if (tab === 'login') {
         result = await auth.login(email, password);
         if (result.success) {
-          navigate('/dashboard');
+          // Redirigir según el rol del usuario
+          if (auth.user?.role === 'ong') {
+            navigate('/dashboard-ong');
+          } else {
+            navigate('/dashboard');
+          }
         } else {
           setError(result.error || 'Error desconocido');
         }
       } else {
-        result = await auth.register(email, password, username, business);
+        result = await auth.register(email, password, businessName, phone, nit, role);
         if (result.success) {
           const message = result.message || '¡Registro exitoso! Ahora puedes iniciar sesión.';
           setSuccessMessage(message);
           setTab('login');
-          setUsername('');
-          setBusiness('');
+          setBusinessName('');
+          setPhone('');
+          setNit('');
+          setRole('supermarket');
           // Mantener email para facilitar el login
           setPassword('');
         } else {
@@ -131,25 +140,35 @@ const AuthForm: React.FC = () => {
             {tab === 'register' ? (
               <div key="right-register">
                 <h2 className="right-title">Create Account</h2>
-                <p className="right-helper">or use your email for registration:</p>
+                <p className="right-helper">Complete todos los campos para registrarse:</p>
                 <form onSubmit={handleSubmit} className="form">
                   <div className="input-row">
-                    <span className="icon">👤</span>
-                    <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Name"
+                    <span className="icon">💼</span>
+                    <select
+                      value={role}
+                      onChange={(e) => setRole(e.target.value as 'supermarket' | 'ong')}
                       required
-                    />
+                      style={{
+                        padding: '12px',
+                        border: '1px solid #ddd',
+                        borderRadius: '5px',
+                        fontSize: '14px',
+                        width: '100%',
+                        backgroundColor: 'white'
+                      }}
+                    >
+                      <option value="supermarket">🏪 Supermercado</option>
+                      <option value="ong">🤝 ONG</option>
+                    </select>
                   </div>
                   <div className="input-row">
                     <span className="icon">🏢</span>
                     <input
                       type="text"
-                      value={business}
-                      onChange={(e) => setBusiness(e.target.value)}
-                      placeholder="Business (optional)"
+                      value={businessName}
+                      onChange={(e) => setBusinessName(e.target.value)}
+                      placeholder="Nombre o Razón Social"
+                      required
                     />
                   </div>
                   <div className="input-row">
@@ -158,7 +177,27 @@ const AuthForm: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Email"
+                      placeholder="Correo Electrónico"
+                      required
+                    />
+                  </div>
+                  <div className="input-row">
+                    <span className="icon">📞</span>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Teléfono"
+                      required
+                    />
+                  </div>
+                  <div className="input-row">
+                    <span className="icon">🆔</span>
+                    <input
+                      type="text"
+                      value={nit}
+                      onChange={(e) => setNit(e.target.value)}
+                      placeholder="NIT"
                       required
                     />
                   </div>

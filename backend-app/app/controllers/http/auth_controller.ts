@@ -7,12 +7,19 @@ export default class AuthController {
    */
   async register({ request, response }: HttpContext) {
     try {
-      const { email, password, name, business } = request.only(['email', 'password', 'name', 'business'])
+      const { email, password, business_name, phone, nit, role } = request.only(['email', 'password', 'business_name', 'phone', 'nit', 'role'])
 
       // Validate required fields
-      if (!email || !password || !name) {
+      if (!email || !password || !business_name || !phone || !nit || !role) {
         return response.badRequest({
-          message: 'Email, password, and name are required',
+          message: 'Email, password, business name, phone, NIT, and role are required',
+        })
+      }
+
+      // Validate role
+      if (role !== 'supermarket' && role !== 'ong') {
+        return response.badRequest({
+          message: 'Role must be either "supermarket" or "ong"',
         })
       }
 
@@ -24,8 +31,10 @@ export default class AuthController {
         password,
         options: {
           data: {
-            name,
-            business: business || null,
+            business_name,
+            phone,
+            nit,
+            role,
           },
         },
       })
@@ -41,7 +50,10 @@ export default class AuthController {
         user: {
           id: authData.user?.id,
           email: authData.user?.email,
-          name,
+          business_name,
+          phone,
+          nit,
+          role,
         },
       })
     } catch (error) {
@@ -86,7 +98,10 @@ export default class AuthController {
         user: {
           id: authData.user?.id,
           email: authData.user?.email,
-          name: authData.user?.user_metadata?.name,
+          businessName: authData.user?.user_metadata?.business_name,
+          phone: authData.user?.user_metadata?.phone,
+          nit: authData.user?.user_metadata?.nit,
+          role: authData.user?.user_metadata?.role,
         },
       })
     } catch (error) {

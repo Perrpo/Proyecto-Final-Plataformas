@@ -4,7 +4,10 @@ import type { ReactNode } from 'react';
 interface User {
   id: string;
   email: string;
-  name: string;
+  businessName: string;
+  phone: string;
+  nit: string;
+  role: 'supermarket' | 'ong';
 }
 
 interface AuthContextType {
@@ -12,7 +15,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (email: string, password: string, name: string, business?: string) => Promise<{ success: boolean; error?: string; message?: string }>;
+  register: (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong') => Promise<{ success: boolean; error?: string; message?: string }>;
   logout: () => void;
   getAuthHeaders: () => Record<string, string>;
 }
@@ -61,12 +64,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (email: string, password: string, name: string, business?: string) => {
+  const register = async (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong') => {
     try {
       const response = await fetch('http://localhost:3333/api/v1/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, business }),
+        body: JSON.stringify({ email, password, business_name: businessName, phone, nit, role }),
       });
 
       if (!response.ok) {
