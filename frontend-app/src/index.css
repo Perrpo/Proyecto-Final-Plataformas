@@ -1,0 +1,143 @@
+/* Futuristic cyberpunk + minimalist Japanese theme tokens */
+:root {
+  /* Core neon palette */
+  --neon-cyan: #21e6ff;
+  --neon-magenta: #ff3fb4;
+  --neon-purple: #9b5cff;
+  --neon-yellow: #f7f54a;
+  --matte-black: #0b0f14;
+  --ink: #0e131a;
+  --charcoal: #131a22;
+  --mist: #cdd6f4;
+  --muted: #8b9eb3;
+
+  /* Elevated surfaces */
+  --surface-1: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.07);
+  --surface-3: rgba(255, 255, 255, 0.12);
+
+  /* Gradients */
+  --grad-primary:
+    radial-gradient(1200px 600px at 10% -10%, rgba(33, 230, 255, 0.18), rgba(0, 0, 0, 0)),
+    radial-gradient(900px 500px at 120% 10%, rgba(255, 63, 180, 0.15), rgba(0, 0, 0, 0));
+  --grad-accent: linear-gradient(135deg, #21e6ff 0%, #9b5cff 50%, #ff3fb4 100%);
+
+  /* Text and borders */
+  --text-primary: #e6edf6;
+  --text-secondary: #a9b7c6;
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 2px rgba(33, 230, 255, 0.6), 0 0 0 6px rgba(155, 92, 255, 0.25);
+
+  /* Typography */
+  --font-ui:
+    'Space Grotesk', Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
+
+  /* Spacing */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --elevation-1: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --elevation-2: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --section-gap: 160px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text-primary);
+  background:
+    radial-gradient(1200px 500px at 120% 0%, rgba(255, 63, 180, 0.09), rgba(0, 0, 0, 0)),
+    radial-gradient(900px 400px at -20% 20%, rgba(33, 230, 255, 0.08), rgba(0, 0, 0, 0)),
+    var(--matte-black);
+  transition:
+    color 200ms ease,
+    background-color 300ms ease;
+  line-height: 1.6;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  background: var(--grad-primary);
+}
+
+/* Links */
+a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    background 160ms ease;
+  padding: 3px;
+}
+
+a:hover {
+  background: linear-gradient(90deg, rgba(33, 230, 255, 0.12), rgba(155, 92, 255, 0.12));
+  color: var(--neon-magenta);
+}
+
+/* Accessible focus */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-content {
+  margin-left: 220px;
+  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(19, 26, 34, 0.85), rgba(19, 26, 34, 0.8)),
+    radial-gradient(600px 300px at 10% 0%, rgba(33, 230, 255, 0.06), rgba(0, 0, 0, 0)),
+    radial-gradient(600px 300px at 90% 0%, rgba(255, 63, 180, 0.05), rgba(0, 0, 0, 0));
+  backdrop-filter: saturate(120%) blur(2px);
+  border-left: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-1);
+}
