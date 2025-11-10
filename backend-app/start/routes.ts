@@ -38,4 +38,33 @@ router.group(() => {
   // router.post('auth/logout', '#controllers/http/auth_controller.logout').middleware('auth')
   router.post('auth/logout', '#controllers/http/auth_controller.logout')
   
+  // Orders - RPA Processing System
+  router.group(() => {
+    // Order CRUD
+    router.get('/', '#controllers/http/order_controller.index')
+    router.post('/', '#controllers/http/order_controller.store')
+    router.get('/:id', '#controllers/http/order_controller.show')
+    
+    // Order Processing
+    router.post('/:id/process', '#controllers/http/order_controller.processOrder')
+    router.post('/process-pending', '#controllers/http/order_controller.processPendingOrders')
+    router.post('/:id/retry', '#controllers/http/order_controller.retryOrder')
+    
+    // Order Validation
+    router.get('/:id/validate', '#controllers/http/order_controller.validateOrder')
+    
+    // Invoice Generation
+    router.get('/:id/invoice', '#controllers/http/order_controller.downloadInvoice')
+    
+    // Email Management
+    router.post('/:id/resend-email', '#controllers/http/order_controller.resendEmail')
+    router.post('/test-email', '#controllers/http/order_controller.testEmail')
+    
+    // Order Actions
+    router.post('/:id/cancel', '#controllers/http/order_controller.cancelOrder')
+    
+    // Statistics
+    router.get('/stats', '#controllers/http/order_controller.getStats')
+  }).prefix('orders')
+  
 }).prefix('/api/v1')
