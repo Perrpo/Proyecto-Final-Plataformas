@@ -66,11 +66,11 @@ class EmailService {
       const mailOptions = {
         from: `"EcoSave Market" <${process.env.EMAIL_USER}>`,
         to: order.customer_email,
-        subject: `✅ Confirmación de Orden #${orderId.slice(0, 8).toUpperCase()} - EcoSave Market`,
+        subject: `🌱 ¡Gracias por tu Donación! #${orderId.slice(0, 8).toUpperCase()} - EcoSave Market`,
         html: this.generateOrderConfirmationHTML(order),
         attachments: [
           {
-            filename: `factura-${orderId.slice(0, 8)}.pdf`,
+            filename: `comprobante-donacion-${orderId.slice(0, 8)}.pdf`,
             content: invoicePDF,
             contentType: 'application/pdf',
           },
@@ -100,10 +100,8 @@ class EmailService {
       .map(
         (p: any) => `
         <tr>
-          <td style="padding: 10px; border-bottom: 1px solid #eee;">${p.product_name}</td>
-          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${p.quantity}</td>
-          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${p.price.toFixed(2)}</td>
-          <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">$${(p.quantity * p.price).toFixed(2)}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee;">${p.product_name}</td>
+          <td style="padding: 15px; border-bottom: 1px solid #eee; text-align: center;">${p.quantity} unidad(es)</td>
         </tr>
       `
       )
@@ -129,27 +127,25 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🎉 ¡Gracias por tu compra!</h1>
-            <p>Tu orden ha sido confirmada</p>
+            <h1>💚 ¡Gracias por tu Donación!</h1>
+            <p>Has ayudado a rescatar alimentos próximos a vencer</p>
           </div>
           
           <div class="content">
             <div class="order-info">
-              <h2>Orden #${order.id.slice(0, 8).toUpperCase()}</h2>
+              <h2>Donación #${order.id.slice(0, 8).toUpperCase()}</h2>
               <p><strong>Cliente:</strong> ${order.customer_name}</p>
               <p><strong>Email:</strong> ${order.customer_email}</p>
               <p><strong>Fecha:</strong> ${new Date(order.created_at).toLocaleDateString('es-ES')}</p>
-              ${order.shipping_address ? `<p><strong>Dirección de envío:</strong> ${order.shipping_address}</p>` : ''}
+              ${order.shipping_address ? `<p><strong>Punto de recolección:</strong> ${order.shipping_address}</p>` : ''}
             </div>
 
-            <h3>Resumen de tu orden:</h3>
+            <h3>Alimentos rescatados:</h3>
             <table class="table">
               <thead>
                 <tr style="background: #00ff9d; color: white;">
-                  <th style="padding: 10px; text-align: left;">Producto</th>
-                  <th style="padding: 10px; text-align: center;">Cantidad</th>
-                  <th style="padding: 10px; text-align: right;">Precio</th>
-                  <th style="padding: 10px; text-align: right;">Subtotal</th>
+                  <th style="padding: 15px; text-align: left;">Alimento</th>
+                  <th style="padding: 15px; text-align: center;">Cantidad</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,17 +153,14 @@ class EmailService {
               </tbody>
             </table>
 
-            <div class="total">
-              Total: $${order.total.toFixed(2)}
-            </div>
-
-            <p style="text-align: center;">
+            <p style="text-align: center; margin-top: 30px;">
               <a href="http://localhost:5173/dashboard" class="button">Ver mi Dashboard</a>
             </p>
 
             <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-top: 20px;">
-              <p style="margin: 0;">🌱 <strong>¡Gracias por ayudarnos a reducir el desperdicio de alimentos!</strong></p>
-              <p style="margin: 10px 0 0 0;">Con tu compra, estás contribuyendo a un planeta más sostenible.</p>
+              <p style="margin: 0;">🌱 <strong>¡Tu donación hace la diferencia!</strong></p>
+              <p style="margin: 10px 0 0 0;">Has evitado que ${products.length} producto(s) terminen en la basura. Estos alimentos serán distribuidos a quienes más lo necesitan.</p>
+              <p style="margin: 10px 0 0 0;">💚 Juntos construimos un futuro más sostenible y solidario.</p>
             </div>
           </div>
 
