@@ -110,6 +110,30 @@ h2 {
   cursor: not-allowed;
 }
 
+.clear-all {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.clear-all:hover:not(:disabled) {
+  background: rgba(255, 59, 48, 0.2);
+  border-color: rgba(255, 59, 48, 0.3);
+}
+
+.clear-all:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .card {
   background: var(--surface-1);
   border-radius: 14px;
@@ -229,6 +253,16 @@ h2 {
   background: linear-gradient(180deg, rgba(155, 92, 255, 0.06), rgba(0, 0, 0, 0));
 }
 
+.notification.system {
+  border-color: rgba(255, 159, 64, 0.35);
+  background: linear-gradient(180deg, rgba(255, 159, 64, 0.06), rgba(0, 0, 0, 0));
+}
+
+.notification.admin {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.06), rgba(0, 0, 0, 0));
+}
+
 .notification-header {
   display: flex;
   align-items: center;
@@ -266,6 +300,16 @@ h2 {
 
 .badge.info {
   background: var(--neon-purple);
+  color: #020409;
+}
+
+.badge.system {
+  background: var(--neon-yellow);
+  color: #020409;
+}
+
+.badge.admin {
+  background: var(--neon-magenta);
   color: #020409;
 }
 

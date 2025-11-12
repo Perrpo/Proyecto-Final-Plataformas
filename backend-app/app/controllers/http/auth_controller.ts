@@ -17,9 +17,9 @@ export default class AuthController {
       }
 
       // Validate role
-      if (role !== 'supermarket' && role !== 'ong') {
+      if (role !== 'supermarket' && role !== 'ong' && role !== 'admin') {
         return response.badRequest({
-          message: 'Role must be either "supermarket" or "ong"',
+          message: 'Role must be either "supermarket", "ong", or "admin"',
         })
       }
 
@@ -69,12 +69,19 @@ export default class AuthController {
    */
   async login({ request, response }: HttpContext) {
     try {
-      const { email, password } = request.only(['email', 'password'])
+      const { email, password, role } = request.only(['email', 'password', 'role'])
 
       // Validate required fields
       if (!email || !password) {
         return response.badRequest({
           message: 'Email and password are required',
+        })
+      }
+
+      // Validate role if provided
+      if (role && role !== 'supermarket' && role !== 'ong' && role !== 'admin') {
+        return response.badRequest({
+          message: 'Role must be either "supermarket", "ong", or "admin"',
         })
       }
 
@@ -92,16 +99,33 @@ export default class AuthController {
         })
       }
 
+      // Get user role from metadata or use provided role
+      let userRole = authData.user?.user_metadata?.role;
+      
+      // Check if user is admin by email (this takes precedence)
+      const adminEmails = ['admin@ecosave.com', 'administrator@ecosave.com']; // Add admin emails here
+      const isAdminByEmail = adminEmails.includes(authData.user?.email || '');
+      
+      if (isAdminByEmail) {
+        userRole = 'admin'; // Force admin role for admin emails
+      } else if (!userRole && role) {
+        // If user has no role in metadata but provided one in login, use it
+        userRole = role;
+      } else if (!userRole) {
+        // If still no role, default to supermarket
+        userRole = 'supermarket';
+      }
+
       return response.ok({
         message: 'Login successful',
         token: authData.session?.access_token,
         user: {
           id: authData.user?.id,
           email: authData.user?.email,
-          businessName: authData.user?.user_metadata?.business_name,
-          phone: authData.user?.user_metadata?.phone,
-          nit: authData.user?.user_metadata?.nit,
-          role: authData.user?.user_metadata?.role,
+          businessName: authData.user?.user_metadata?.business_name || 'Administrador',
+          phone: authData.user?.user_metadata?.phone || 'N/A',
+          nit: authData.user?.user_metadata?.nit || 'N/A',
+          role: userRole,
         },
       })
     } catch (error) {

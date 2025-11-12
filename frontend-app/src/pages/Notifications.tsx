@@ -1,79 +1,28 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
 import './Notifications.css';
 
-interface Notification {
-  id: number;
-  text: string;
-  type: 'urgent' | 'warning' | 'success' | 'info';
-  isRead: boolean;
-  timestamp: string;
-}
-
 const Notifications: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: 1,
-      text: 'Producto vence hoy - Pollo fresco (5 unidades)',
-      type: 'urgent',
-      isRead: false,
-      timestamp: 'Hace 2 min',
-    },
-    {
-      id: 2,
-      text: 'Vencimiento en 2 días - Pan integral (25 unidades)',
-      type: 'warning',
-      isRead: false,
-      timestamp: 'Hace 1 hora',
-    },
-    {
-      id: 3,
-      text: 'Donación completada - Leche entera a Banco de Alimentos Central',
-      type: 'success',
-      isRead: true,
-      timestamp: 'Hace 3 horas',
-    },
-    {
-      id: 4,
-      text: 'Nueva ONG registrada - Fundación Esperanza en tu área',
-      type: 'info',
-      isRead: true,
-      timestamp: 'Hace 1 día',
-    },
-    {
-      id: 5,
-      text: 'Inventario bajo - Quedan pocas unidades de productos en categoría Frutas',
-      type: 'warning',
-      isRead: true,
-      timestamp: 'Hace 2 días',
-    },
-  ]);
-
-  const unreadCount = useMemo(() => {
-    return notifications.filter((n) => !n.isRead).length;
-  }, [notifications]);
-
-  const markAllAsRead = () => {
-    setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
-  };
-
-  const markAsRead = (id: number) => {
-    setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    );
-  };
-
-  const deleteNotification = (id: number) => {
-    setNotifications(notifications.filter((n) => n.id !== id));
-  };
+  const auth = useAuth();
+  const { notifications, markAsRead, clearAll, unreadCount } = useNotifications();
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'urgent':
+      case 'product_expiring':
         return '⚠️';
-      case 'warning':
-        return '⏰';
-      case 'success':
+      case 'product_added':
+        return '📦';
+      case 'donation_completed':
         return '✅';
+      case 'donation_requested':
+        return '🤝';
+      case 'new_user_registered':
+        return '👤';
+      case 'admin_system_update':
+        return '⚙️';
+      case 'user_role_changed':
+        return '🔐';
       default:
         return '🔔';
     }
@@ -81,15 +30,61 @@ const Notifications: React.FC = () => {
 
   const getBadgeText = (type: string) => {
     switch (type) {
-      case 'urgent':
+      case 'product_expiring':
         return 'Urgente';
-      case 'warning':
-        return 'Advertencia';
-      case 'success':
-        return 'Éxito';
+      case 'product_added':
+        return 'Nuevo';
+      case 'donation_completed':
+        return 'Completado';
+      case 'donation_requested':
+        return 'Solicitado';
+      case 'new_user_registered':
+        return 'Nuevo Usuario';
+      case 'admin_system_update':
+        return 'Sistema';
+      case 'user_role_changed':
+        return 'Rol';
       default:
         return 'Info';
     }
+  };
+
+  const getTypeClass = (type: string) => {
+    switch (type) {
+      case 'product_expiring':
+        return 'urgent';
+      case 'product_added':
+        return 'info';
+      case 'donation_completed':
+        return 'success';
+      case 'donation_requested':
+        return 'warning';
+      case 'new_user_registered':
+        return 'info';
+      case 'admin_system_update':
+        return 'system';
+      case 'user_role_changed':
+        return 'admin';
+      default:
+        return 'info';
+    }
+  };
+
+  const formatTimestamp = (date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'Ahora';
+    if (minutes < 60) return `Hace ${minutes} min`;
+    if (hours < 24) return `Hace ${hours} hora${hours > 1 ? 's' : ''}`;
+    return `Hace ${days} día${days > 1 ? 's' : ''}`;
+  };
+
+  const markAllAsRead = () => {
+    notifications.forEach(n => !n.read && markAsRead(n.id));
   };
 
   return (
@@ -98,10 +93,12 @@ const Notifications: React.FC = () => {
         <h1 className="main-title">Panel de Notificaciones</h1>
         <div className="user-info">
           <div>
-            <b>EcoSave Market</b>
-            <div className="email">demo@ecosave.com</div>
+            <b>{auth.user?.businessName || 'EcoSave Market'}</b>
+            <div className="email">{auth.user?.email || 'demo@ecosave.com'}</div>
           </div>
-          <button className="logout">Salir</button>
+          <button className="logout" onClick={auth.logout}>
+            Salir
+          </button>
         </div>
       </div>
       <p className="subtitle">Alertas automáticas sobre inventarios y actividades</p>
@@ -113,6 +110,13 @@ const Notifications: React.FC = () => {
           disabled={unreadCount === 0}
         >
           Marcar todas como leídas
+        </button>
+        <button
+          className="clear-all"
+          onClick={clearAll}
+          disabled={notifications.length === 0}
+        >
+          Limpiar todas
         </button>
       </div>
       <div className="card config-card">
@@ -136,19 +140,44 @@ const Notifications: React.FC = () => {
             </label>
           </div>
           <div className="alert-item">
-            <span>Alertas de inventario bajo</span>
+            <span>Nuevos productos agregados</span>
             <label className="switch">
               <input type="checkbox" defaultChecked />
               <span className="slider"></span>
             </label>
           </div>
           <div className="alert-item">
-            <span>Nuevos socios en área</span>
+            <span>Solicitudes de donación</span>
             <label className="switch">
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked />
               <span className="slider"></span>
             </label>
           </div>
+          {auth.user?.role === 'admin' && (
+            <>
+              <div className="alert-item">
+                <span>Nuevos usuarios registrados</span>
+                <label className="switch">
+                  <input type="checkbox" defaultChecked />
+                  <span className="slider"></span>
+                </label>
+              </div>
+              <div className="alert-item">
+                <span>Cambios de roles de usuarios</span>
+                <label className="switch">
+                  <input type="checkbox" defaultChecked />
+                  <span className="slider"></span>
+                </label>
+              </div>
+              <div className="alert-item">
+                <span>Actualizaciones del sistema</span>
+                <label className="switch">
+                  <input type="checkbox" defaultChecked />
+                  <span className="slider"></span>
+                </label>
+              </div>
+            </>
+          )}
         </div>
       </div>
       <div className="card">
@@ -164,17 +193,17 @@ const Notifications: React.FC = () => {
             notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`notification ${notification.type}`}
+                className={`notification ${getTypeClass(notification.type)}`}
               >
                 <div className="notification-header">
                   <span className="icon">{getIcon(notification.type)}</span>
-                  <b>{notification.text.split(' - ')[0]}</b>
-                  <span className={`badge ${notification.type}`}>
+                  <b>{notification.title}</b>
+                  <span className={`badge ${getTypeClass(notification.type)}`}>
                     {getBadgeText(notification.type)}
                   </span>
-                  {!notification.isRead && <span className="dot blue"></span>}
+                  {!notification.read && <span className="dot blue"></span>}
                   <div className="actions-icons">
-                    {!notification.isRead && (
+                    {!notification.read && (
                       <button
                         className="icon-btn"
                         title="Marcar como leído"
@@ -183,20 +212,13 @@ const Notifications: React.FC = () => {
                         ✔️
                       </button>
                     )}
-                    <button
-                      className="icon-btn"
-                      title="Eliminar"
-                      onClick={() => deleteNotification(notification.id)}
-                    >
-                      🗑️
-                    </button>
                   </div>
                 </div>
                 <div className="notification-body">
-                  {notification.text.split(' - ')[1] || notification.text}
+                  {notification.message}
                 </div>
                 <div className="notification-footer">
-                  <span>{notification.timestamp}</span>
+                  <span>{formatTimestamp(notification.timestamp)}</span>
                 </div>
               </div>
             ))
@@ -208,21 +230,21 @@ const Notifications: React.FC = () => {
           <span className="icon summary-alert">⚠️</span>
           <span className="summary-title">Alertas Urgentes</span>
           <span className="summary-value">
-            {notifications.filter((n) => n.type === 'urgent').length}
+            {notifications.filter((n) => n.type === 'product_expiring').length}
           </span>
         </div>
         <div className="summary-card">
-          <span className="icon summary-warning">⏰</span>
-          <span className="summary-title">Advertencias</span>
+          <span className="icon summary-warning">🤝</span>
+          <span className="summary-title">Solicitudes</span>
           <span className="summary-value">
-            {notifications.filter((n) => n.type === 'warning').length}
+            {notifications.filter((n) => n.type === 'donation_requested').length}
           </span>
         </div>
         <div className="summary-card">
           <span className="icon summary-success">✅</span>
-          <span className="summary-title">Acciones Completadas</span>
+          <span className="summary-title">Completadas</span>
           <span className="summary-value">
-            {notifications.filter((n) => n.type === 'success').length}
+            {notifications.filter((n) => n.type === 'donation_completed').length}
           </span>
         </div>
       </div>

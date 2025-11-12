@@ -7,15 +7,15 @@ interface User {
   businessName: string;
   phone: string;
   nit: string;
-  role: 'supermarket' | 'ong';
+  role: 'supermarket' | 'ong' | 'admin';
 }
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong') => Promise<{ success: boolean; error?: string; message?: string }>;
+  login: (email: string, password: string, role?: 'supermarket' | 'ong' | 'admin') => Promise<{ success: boolean; error?: string }>;
+  register: (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong' | 'admin') => Promise<{ success: boolean; error?: string; message?: string }>;
   logout: () => void;
   getAuthHeaders: () => Record<string, string>;
 }
@@ -32,12 +32,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('token');
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, role?: 'supermarket' | 'ong' | 'admin') => {
     try {
+      const requestBody: any = { email, password };
+      if (role) {
+        requestBody.role = role;
+      }
+
       const response = await fetch('http://localhost:3333/api/v1/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -64,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong') => {
+  const register = async (email: string, password: string, businessName: string, phone: string, nit: string, role: 'supermarket' | 'ong' | 'admin') => {
     try {
       const response = await fetch('http://localhost:3333/api/v1/auth/register', {
         method: 'POST',

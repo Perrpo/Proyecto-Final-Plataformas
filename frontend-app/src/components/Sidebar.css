@@ -75,3 +75,27 @@ nav a:hover {
     0 0 0 1px rgba(255, 63, 180, 0.45),
     0 0 18px rgba(255, 63, 180, 0.35);
 }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.user-role {
+  display: flex;
+  justify-content: center;
+}
+
+.role-badge {
+  background: linear-gradient(90deg, rgba(33, 230, 255, 0.15), rgba(155, 92, 255, 0.15));
+  color: var(--neon-cyan);
+  border: 1px solid rgba(33, 230, 255, 0.3);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(33, 230, 255, 0.15);
+}

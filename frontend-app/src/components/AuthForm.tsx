@@ -9,7 +9,8 @@ const AuthForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [nit, setNit] = useState('');
-  const [role, setRole] = useState<'supermarket' | 'ong'>('supermarket');
+  const [role, setRole] = useState<'supermarket' | 'ong' | 'admin'>('supermarket');
+  const [loginRole, setLoginRole] = useState<'supermarket' | 'ong' | 'admin'>('supermarket');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,10 +39,12 @@ const AuthForm: React.FC = () => {
     try {
       let result;
       if (tab === 'login') {
-        result = await auth.login(email, password);
+        result = await auth.login(email, password, loginRole);
         if (result.success) {
           // Redirigir según el rol del usuario
-          if (auth.user?.role === 'ong') {
+          if (auth.user?.role === 'admin') {
+            navigate('/dashboard-admin');
+          } else if (auth.user?.role === 'ong') {
             navigate('/dashboard-ong');
           } else {
             navigate('/dashboard');
@@ -84,6 +87,26 @@ const AuthForm: React.FC = () => {
               <div key="left-login">
                 <h2 className="right-title">Sign In</h2>
                 <form onSubmit={handleSubmit} className="form">
+                  <div className="input-row">
+                    <span className="icon">👤</span>
+                    <select
+                      value={loginRole}
+                      onChange={(e) => setLoginRole(e.target.value as 'supermarket' | 'ong' | 'admin')}
+                      required
+                      style={{
+                        padding: '12px',
+                        border: '1px solid #ddd',
+                        borderRadius: '5px',
+                        fontSize: '14px',
+                        width: '100%',
+                        backgroundColor: 'white'
+                      }}
+                    >
+                      <option value="supermarket">🏪 Supermercado</option>
+                      <option value="ong">🤝 ONG</option>
+                      <option value="admin">⚙️ Administrador</option>
+                    </select>
+                  </div>
                   <div className="input-row">
                     <span className="icon">@</span>
                     <input
@@ -159,6 +182,7 @@ const AuthForm: React.FC = () => {
                     >
                       <option value="supermarket">🏪 Supermercado</option>
                       <option value="ong">🤝 ONG</option>
+                      <option value="admin">⚙️ Administrador</option>
                     </select>
                   </div>
                   <div className="input-row">
