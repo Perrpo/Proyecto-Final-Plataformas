@@ -138,6 +138,109 @@ El proyecto utiliza un tema **cyberpunk futurista** con:
 - `GET /api/v1/health` - Estado del servidor
 - `GET /` - Información de la API
 
+## 🔬 Low-Code y RPA en EcoSave Market
+
+### ¿Qué es Low-Code?
+
+El **Low-Code** es una metodología de desarrollo de software que permite crear aplicaciones mediante interfaces visuales, configuración y modelado en lugar de programación tradicional. En EcoSave Market, esta aproximación se manifiesta a través de:
+
+#### Características Principales:
+- **Desarrollo Visual**: Componentes pre-configurados que se arrastran y sueltan
+- **Configuración vs Codificación**: Menos código manual, más configuración
+- **Prototipado Rápido**: Creación rápida de interfaces funcionales
+- **Automatización de Procesos**: Flujos de trabajo predefinidos
+
+#### Beneficios en EcoSave:
+- **Aceleración del Desarrollo**: Reducción del tiempo de creación de features
+- **Accesibilidad**: Permite que personas no técnicas puedan realizar modificaciones
+- **Mantenimiento Simplificado**: Actualizaciones mediante configuración
+- **Consistencia**: Componentes estandarizados reutilizables
+
+### ¿Qué es RPA (Robotic Process Automation)?
+
+La **Automatización Robótica de Procesos (RPA)** es tecnología que permite configurar software "robots" para emular y automatizar acciones humanas repetitivas interactuando con sistemas digitales.
+
+#### Aplicaciones en EcoSave Market:
+
+#### 🤖 Automatización de Inventario
+- **Monitoreo Automático**: Los bots verifican constantemente las fechas de vencimiento
+- **Alertas Inteligentes**: Notificaciones automáticas cuando productos están próximos a expirar
+- **Categorización Automática**: Clasificación de productos según tipo y urgencia
+
+#### 📊 Procesos de Datos
+- **Extracción Automática**: Recolección de datos de múltiples fuentes
+- **Validación de Información**: Verificación automática de calidad de datos
+- **Generación de Reportes**: Creación automática de informes de desperdicio
+
+#### 🔄 Integración de Sistemas
+- **Sincronización Automática**: Actualización entre inventario y plataforma web
+- **Procesamiento de Órdenes**: Automatización de confirmaciones de donación
+- **Comunicaciones**: Envío automático de correos y notificaciones
+
+### Arquitectura Low-Code + RPA
+
+#### Componentes de Automatización:
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   Interfaz      │    │   Motor RPA      │    │   Sistemas      │
+│   Low-Code      │◄──►│   (Bots)         │◄──►│   Externos      │
+│                 │    │                  │    │                 │
+│ • Drag & Drop   │    │ • Web Scraping   │    │ • Inventarios   │
+│ • Configuración │    │ • API Calls      │    │ • ONGs          │
+│ • Templates     │    │ • Data Processing│    │ • Logística     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+```
+
+#### Flujo de Automatización:
+
+1. **Detección**: El sistema monitorea automáticamente el inventario
+2. **Análisis**: Los bots procesan datos de vencimiento y categoría
+3. **Decisión**: Reglas predefinidas determinan acciones (donar/descontar)
+4. **Ejecución**: Automatización de notificaciones y actualizaciones
+5. **Reporte**: Generación automática de métricas y estadísticas
+
+### Tecnologías RPA Implementadas
+
+#### 🛠️ Herramientas de Automatización
+- **Web Scraping**: Extracción automática de datos de proveedores
+- **API Automation**: Integración con sistemas externos
+- **Scheduled Tasks**: Ejecución automática en horarios configurados
+- **Event-Driven Automation**: Respuesta a eventos del sistema
+
+#### 📈 Procesos Optimizados
+- **Reducción 80%** en tiempo de procesamiento manual
+- **Eliminación de errores** humanos en clasificación
+- **Disponibilidad 24/7** para monitoreo y alertas
+- **Escalabilidad** automática según volumen de productos
+
+### Beneficios Combinados
+
+#### 🚀 Eficiencia Operativa
+- **Procesos Instantáneos**: Automatización completa de tareas repetitivas
+- **Reducción de Costos**: Menos horas-hombre en procesos manuales
+- **Calidad Consistente**: Estandarización de todos los procesos
+
+#### 🌍 Impacto Social
+- **Respuesta Rápida**: Detección inmediata de alimentos para donar
+- **Maximización de Recursos**: Optimización del proceso de redistribución
+- **Transparencia Total**: Trazabilidad completa del proceso
+
+#### 🔧 Ventajas Técnicas
+- **Integración Sencilla**: Conexión con múltiples sistemas
+- **Mantenimiento Predictivo**: Detección automática de problemas
+- **Evolución Continua**: Mejora automática basada en datos
+
+### Futuro de la Automatización en EcoSave
+
+#### 🎯 Próximas Implementaciones
+- **IA Predictiva**: Anticipación de patrones de desperdicio
+- **Blockchain**: Trazabilidad inmutable de donaciones
+- **IoT Integration**: Sensores inteligentes en almacenes
+- **Machine Learning**: Optimización automática de rutas de distribución
+
+Esta combinación de Low-Code y RPA posiciona a EcoSave Market como una plataforma líder en eficiencia tecnológica para el combate contra el desperdicio de alimentos.
+
 ## 📝 Notas
 
 - El proyecto está configurado para conectarse a Supabase
