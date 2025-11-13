@@ -271,7 +271,7 @@ const Dashboard: React.FC = () => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div>
-          <h1 className="main-title">Dashboard Supermercado</h1>
+          <h1 className="main-title">Dashboard {auth.user?.role === 'ong' ? 'ONG' : auth.user?.role === 'admin' ? 'Admin' : 'Supermercado'}</h1>
           <p className="subtitle">Gestiona tus productos y donaciones</p>
         </div>
         <div className="user-info">
