@@ -32,6 +32,9 @@ const Sidebar: React.FC = () => {
               🔔 Notificaciones
               {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
             </NavLink>
+            <NavLink to="/lowcode" className={({ isActive }) => isActive ? 'active' : ''}>
+              🔧 Low Code
+            </NavLink>
           </>
         ) : isONG ? (
           <>
@@ -45,6 +48,9 @@ const Sidebar: React.FC = () => {
               🔔 Notificaciones
               {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
             </NavLink>
+            <NavLink to="/lowcode" className={({ isActive }) => isActive ? 'active' : ''}>
+              🔧 Low Code
+            </NavLink>
           </>
         ) : (
           <>
@@ -57,6 +63,9 @@ const Sidebar: React.FC = () => {
             <NavLink to="/notifications" className={({ isActive }) => isActive ? 'active' : ''}>
               🔔 Notificaciones
               {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+            </NavLink>
+            <NavLink to="/lowcode" className={({ isActive }) => isActive ? 'active' : ''}>
+              🔧 Low Code
             </NavLink>
           </>
         )}

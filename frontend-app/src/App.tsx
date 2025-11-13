@@ -9,6 +9,7 @@ import DashboardONG from './pages/DashboardONG';
 import DashboardAdmin from './pages/DashboardAdmin';
 import Map from './pages/Map';
 import Notifications from './pages/Notifications';
+import LowCode from './pages/LowCode';
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, user } = useAuth();
@@ -39,6 +40,7 @@ const AppContent: React.FC = () => {
           <Route path="/dashboard-admin" element={<DashboardAdmin />} />
           <Route path="/map" element={<Map />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/lowcode" element={<LowCode />} />
           <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
         </Routes>
       </main>

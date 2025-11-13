@@ -66,5 +66,31 @@ router.group(() => {
     // Statistics
     router.get('/stats', '#controllers/http/order_controller.getStats')
   }).prefix('orders')
+
+  // Low Code Platform
+  router.group(() => {
+    // Formularios
+    router.get('/forms', '#controllers/http/lowcode_controller.listForms')
+    router.get('/forms/:id', '#controllers/http/lowcode_controller.getForm')
+    router.post('/forms', '#controllers/http/lowcode_controller.createForm')
+    router.put('/forms/:id', '#controllers/http/lowcode_controller.updateForm')
+    router.delete('/forms/:id', '#controllers/http/lowcode_controller.deleteForm')
+    router.post('/forms/:id/submit', '#controllers/http/lowcode_controller.submitForm')
+
+    // Workflows
+    router.get('/workflows', '#controllers/http/lowcode_controller.listWorkflows')
+    router.get('/workflows/:id', '#controllers/http/lowcode_controller.getWorkflow')
+    router.post('/workflows', '#controllers/http/lowcode_controller.createWorkflow')
+    router.put('/workflows/:id', '#controllers/http/lowcode_controller.updateWorkflow')
+    router.delete('/workflows/:id', '#controllers/http/lowcode_controller.deleteWorkflow')
+    router.post('/workflows/:id/execute', '#controllers/http/lowcode_controller.executeWorkflow')
+
+    // Endpoints Dinámicos
+    router.get('/endpoints', '#controllers/http/lowcode_controller.listEndpoints')
+    router.get('/endpoints/:id', '#controllers/http/lowcode_controller.getEndpoint')
+    router.post('/endpoints', '#controllers/http/lowcode_controller.createEndpoint')
+    router.put('/endpoints/:id', '#controllers/http/lowcode_controller.updateEndpoint')
+    router.delete('/endpoints/:id', '#controllers/http/lowcode_controller.deleteEndpoint')
+  }).prefix('lowcode')
   
 }).prefix('/api/v1')
